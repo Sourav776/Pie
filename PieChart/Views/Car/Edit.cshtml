@@ -3,20 +3,19 @@
 @{
     ViewBag.Title = "Edit";
 }
-
 <h2>Edit</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>CAR</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.CAR_ID)
 
-        <div class="form-group">
+        <div class="form-group required">
             @Html.LabelFor(model => model.MANUFACTURER, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.MANUFACTURER, new { htmlAttributes = new { @class = "form-control" } })
@@ -24,7 +23,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group required">
             @Html.LabelFor(model => model.MODEL, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.MODEL, new { htmlAttributes = new { @class = "form-control" } })
@@ -59,3 +58,14 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+<script>
+
+    $(document).on("submit", "form", function (e) {
+        var MANUFACTURER = $("#MANUFACTURER").val().trim();
+        var MODEL = $("#MODEL").val().trim();
+        if (MANUFACTURER == "" || MODEL == "") {
+            alert("Please Enter Values");
+            e.preventDefault();
+        }
+    });
+</script>
