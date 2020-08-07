@@ -1,0 +1,50 @@
+﻿@model PieChart.CAR
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CAR</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MANUFACTURER)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MANUFACTURER)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MODEL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MODEL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.YEAR)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.YEAR)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PRODUCING_COUNTRY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PRODUCING_COUNTRY)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CAR_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

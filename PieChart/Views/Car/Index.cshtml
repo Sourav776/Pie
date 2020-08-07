@@ -1,0 +1,202 @@
+﻿@model IEnumerable<PieChart.CAR>
+<script src="https://www.google.com/jsapi"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="~/Scripts/datatables.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/datatables.min.css" rel="stylesheet" />
+
+<body>
+    <div id="chartId"></div>
+    <div>
+        <label> Search</label>
+        <input class="form-control" id="searchInput" />
+    </div>
+    <br />
+    <div class="form-group pull-right">
+
+        <div>
+            <input class="breakWord" type="file" id="Files" name="Files" />
+        </div>
+        <br />
+        <button type="button" class="btn btn-default btn-sm" id="uploadButton">
+            <span class="glyphicon glyphicon-upload"></span> Upload
+        </button>
+    </div>
+    <div id="CarList">
+        @{
+            Html.RenderPartial("~/Views/CAR/CarList.cshtml", Model);
+        }
+
+    </div>
+
+
+</body>
+
+<script>
+
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            url:'@Url.Action("GetData","Car")',
+            success: function (result) {
+                google.charts.load('current', {
+                    'packages':['corechart']
+                });
+                google.charts.setOnLoadCallback(function () {
+                    drawChart(result);
+                });
+            },
+            error: function (result) {
+                alert("Error Occured");
+            }
+        });
+
+    });
+
+    function drawChart(result) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Key');
+        data.addColumn('number', 'Number');
+        var arr = [];
+        $.each(result, function (i, obj) {
+            arr.push([obj.key, obj.number]);
+        });
+        //alert(arr);
+        data.addRows(arr);
+        var chartOptions = {
+            title:"Chart",
+            width: 600,
+            height: 300,
+            bar: {groupWidth:"20%"}
+        }
+        var chart = new google.visualization.PieChart(document.getElementById('chartId'));
+        chart.draw(data, chartOptions);
+    }
+
+
+    $("#searchInput").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchValue","CAR")',
+                dataType: "json",
+                data: { search: $("#searchInput").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.MODEL, value: item.MODEL };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Error");
+                }
+            });
+        }
+    });
+    //$(document).ready(function () {
+    //    $('#tableId').DataTable({
+    //        "bFilter": true
+    //    });
+    //    $('.dataTables_length').addClass('bs-select');
+    //});
+    $(document).ready(function () {
+        if (!$.fn.DataTable.isDataTable('#tableId')) {
+            $('#tableId').dataTable({
+                pageLength: 10,
+                filter: false,
+                deferRender: true,
+                scrollY: 200,
+                scrollCollapse: true,
+                scroller: true
+            });
+            $("#tableId_length").hide()
+        };
+    });
+
+    $("#searchInput").focusout(function () {
+        LoadChartAndTable();
+        
+    });
+    $("#searchInput").keypress(function (e) {
+        if (e.which == 13) {
+            LoadChartAndTable();
+            $("#searchInput").autocomplete('close');
+        }
+    });
+
+    function LoadChartAndTable() {
+        var searchInput = $("#searchInput").val();
+        //filter chart
+        $.ajax({
+            url: '@Url.Action("FilterDataChart", "Car")',
+            type: "GET",
+            data: { value: searchInput },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result) {
+                google.charts.load('current', {
+                    'packages':['corechart']
+                });
+                google.charts.setOnLoadCallback(function () {
+                    drawChart(result);
+                });
+            },
+            error: function (result) {
+                alert("Error Occured");
+            } 
+        });
+
+        //filter table
+        $.ajax({
+            url: '@Url.Action("FilterDataTable", "Car")',
+            type: "GET",
+            data: { value: searchInput },
+            success: function (result) {
+                //alert(result);
+                $("#CarList").empty();
+                $("#CarList").html(result);
+            },
+            error: function (result) {
+                alert("Error Occured");
+            }
+        });
+    }
+    $("#uploadButton").click(function () {
+        var file = $("#Files");
+        if ($('#Files').get(0).files.length === 0) {
+            alert("Please Select a file", "");
+            return;
+        }
+        var fileExtension = getExtension(file.val());
+        if (fileExtension != "CSV") {
+            alert("Please Select a CSV file", "");
+            return;
+        }
+        var formData = new FormData();
+        formData.append('file', $('#Files')[0].files[0]);
+
+        $.ajax({
+            type: "POST",
+            data: formData,
+            processData: false, 
+            contentType: false,
+            url:'@Url.Action("StoreToDataBase", "Car")',
+            success: function (result) {
+                location.reload();
+            },
+            error: function (result) {
+                alert("Error Occured");
+            }
+        });
+
+    });
+
+
+    function getExtension(filename) {
+        var parts = filename.split('.');
+        return parts[parts.length - 1].toUpperCase();
+    }
+</script>
