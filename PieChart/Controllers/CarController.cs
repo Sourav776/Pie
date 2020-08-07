@@ -148,8 +148,8 @@ namespace PieChart.Controllers
                 foreach (var item in data)
                 {
                     var unit = new ReturnData();
-                    unit.key = item.Key;
-                    unit.number = item.Count();
+                    unit.Key = item.Key;
+                    unit.Number = item.Count();
                     returnObj.Add(unit);
                 }
                 return Json(returnObj, JsonRequestBehavior.AllowGet);
@@ -171,8 +171,8 @@ namespace PieChart.Controllers
                     foreach (var item in data)
                     {
                         var unit = new ReturnData();
-                        unit.key = item.Key;
-                        unit.number = item.Count();
+                        unit.Key = item.Key;
+                        unit.Number = item.Count();
                         returnObj.Add(unit);
                     }
                     return Json(returnObj, JsonRequestBehavior.AllowGet);
@@ -185,8 +185,8 @@ namespace PieChart.Controllers
                     foreach (var item in data)
                     {
                         var unit = new ReturnData();
-                        unit.key = item.Key;
-                        unit.number = item.Count();
+                        unit.Key = item.Key;
+                        unit.Number = item.Count();
                         returnObj.Add(unit);
                     }
                     return Json(returnObj, JsonRequestBehavior.AllowGet);
@@ -256,8 +256,8 @@ namespace PieChart.Controllers
         }
         public class ReturnData
         {
-            public string key { get; set; }
-            public long number { get; set; }
+            public string Key { get; set; }
+            public long Number { get; set; }
         }
     }
 
