@@ -185,10 +185,16 @@
             contentType: false,
             url:'@Url.Action("StoreToDataBase", "Car")',
             success: function (result) {
-                location.reload();
+                if (result == "Success") {
+                    location.reload();
+                }
+                else {
+                    alert(result);
+                }
+                
             },
             error: function (result) {
-                alert("Error Occured");
+              alert(result);
             }
         });
 

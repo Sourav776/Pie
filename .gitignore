@@ -6,3 +6,5 @@
 /.vs/PieChart/v15/Server/sqlite3/storage.ide
 /.vs/PieChart/v15/Server/sqlite3/storage.ide-shm
 /.vs/PieChart/v15/Server/sqlite3/storage.ide-wal
+/PieChart/bin
+/PieChart/obj/Debug/PieChart.csproj.CopyComplete
