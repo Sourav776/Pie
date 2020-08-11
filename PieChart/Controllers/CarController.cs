@@ -130,28 +130,28 @@ namespace PieChart.Controllers
             {
                 var searchData = db.CAR.Where(x => x.MODEL.Contains(search) || x.MANUFACTURER.Contains(search)
                 || x.PRODUCING_COUNTRY.Contains(search)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).ToList();
-                var ret = new List<ReturnData>();
+                var returnList = new List<ReturnData>();
                 foreach (var item in searchData)
                 {
                     var unit = new ReturnData();
                     if (item.MANUFACTURER.ToLower().Contains(search.ToLower()))
                     {
                         unit.Key = item.MANUFACTURER;
-                        ret.Add(unit);
+                        returnList.Add(unit);
                     }
                     if (item.MODEL.ToLower().Contains(search.ToLower()))
                     {
                         unit.Key = item.MODEL;
-                        ret.Add(unit);
+                        returnList.Add(unit);
                     }
                     
                 }
-                if (ret.Any())
+                if (returnList.Any())
                 {
-                    ret = ret.CustomDistinct(x => x.Key).ToList();
+                    returnList = returnList.CustomDistinct(x => x.Key).ToList();
                 }
                 
-                return new JsonResult { Data = ret, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                return new JsonResult { Data = returnList, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
             catch (Exception ex)
             {
