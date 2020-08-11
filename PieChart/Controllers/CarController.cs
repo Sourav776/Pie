@@ -128,8 +128,7 @@ namespace PieChart.Controllers
         {
             try
             {
-                var searchData = db.CAR.Where(x => x.MODEL.Contains(search) || x.MANUFACTURER.Contains(search)
-                || x.PRODUCING_COUNTRY.Contains(search)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).ToList();
+                var searchData = db.CAR.Where(x => x.MODEL.Contains(search) || x.MANUFACTURER.Contains(search)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).ToList();
                 var returnList = new List<ReturnData>();
                 foreach (var item in searchData)
                 {
@@ -199,8 +198,7 @@ namespace PieChart.Controllers
                 else
 
                 {
-                    var data = db.CAR.Where(x => x.MODEL.Contains(value) || x.MANUFACTURER.Contains(value)
-                || x.PRODUCING_COUNTRY.Contains(value)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).GroupBy(x => x.MANUFACTURER).ToList();
+                    var data = db.CAR.Where(x => x.MODEL.Contains(value) || x.MANUFACTURER.Contains(value)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).GroupBy(x => x.MANUFACTURER).ToList();
                     var returnObj = new List<ReturnData>();
                     foreach (var item in data)
                     {
@@ -224,8 +222,7 @@ namespace PieChart.Controllers
             if (value == "")
                 data = db.CAR.ToList();
             else
-                data = db.CAR.Where(x => x.MODEL.Contains(value) || x.MANUFACTURER.Contains(value)
-                || x.PRODUCING_COUNTRY.Contains(value)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).ToList();
+                data = db.CAR.Where(x => x.MODEL.Contains(value) || x.MANUFACTURER.Contains(value)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).ToList();
             return PartialView("CarList", data);
 
 
