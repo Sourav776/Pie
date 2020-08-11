@@ -10,4 +10,4 @@ To build the project locally, you will need to do the following
 
 //
 
-Search is only enabled for Car Model.
+Search is only enabled for Car both car Manufacturer and Model.
