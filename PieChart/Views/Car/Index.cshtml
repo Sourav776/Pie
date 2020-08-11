@@ -87,7 +87,7 @@
                 data: { search: $("#searchInput").val() },
                 success: function (data) {
                     response($.map(data, function (item) {
-                        return { label: item.MODEL, value: item.MODEL };
+                        return { label: item.Key, value: item.Key };
                     }));
                 },
                 error: function (xhr, status, error) {

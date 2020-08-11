@@ -158,3 +158,4 @@ E:\Pie\PieChart\obj\Debug\PieChart.csproj.CoreCompileInputs.cache
 E:\Pie\PieChart\obj\Debug\PieChart.csproj.CopyComplete
 E:\Pie\PieChart\obj\Debug\PieChart.dll
 E:\Pie\PieChart\obj\Debug\PieChart.pdb
+F:\VisuPro\Pie\PieChart\obj\Debug\PieChart.csproj.CoreCompileInputs.cache

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using System;
+using Microsoft.Ajax.Utilities;
 
 namespace PieChart.Controllers
 {
@@ -128,11 +129,38 @@ namespace PieChart.Controllers
         {
             try
             {
-                List<CarModel> allsearch = db.CAR.Where(x =>  x.MODEL.Contains(search)).Select(x => new CarModel
+
+                var searchData = db.CAR.Where(x => x.MODEL.Contains(search) || x.MANUFACTURER.Contains(search) || x.PRODUCING_COUNTRY.Contains(search)).Distinct().ToList();
+                var ret = new List<ReturnData>();
+                foreach (var item in searchData)
                 {
-                    MODEL=x.MODEL
-                }).Distinct().ToList();
-                return new JsonResult { Data = allsearch, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    var unit = new ReturnData();
+
+                    unit.Key = item.MANUFACTURER;
+                    ret.Add(unit);
+                    unit.Key = item.MODEL;
+                    ret.Add(unit);
+                    unit.Key = item.PRODUCING_COUNTRY;
+                    ret.Add(unit);
+                }
+                if(ret.Any())
+                {
+                    ret = ret.DistinctBy(x=>x.Key).ToList();
+                }
+                //foreach(var item in searchData)
+                //{
+                //    foreach(var val in item)
+                //    {
+                //        var ret = new ReturnData();
+
+                //    }
+                //}
+
+                //List <CarModel> allsearch = db.CAR.Where(x =>  x.MODEL.Contains(search)).Select(x => new CarModel
+                //{
+                //    MODEL=x.MODEL
+                //}).Distinct().ToList();
+                return new JsonResult { Data = ret, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
             catch(Exception ex)
             {
@@ -258,6 +286,18 @@ namespace PieChart.Controllers
         {
             public string Key { get; set; }
             public long Number { get; set; }
+        }
+     public static IEnumerable<TSource> DistinctBy<TSource, TKey>
+    (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
         }
     }
 
