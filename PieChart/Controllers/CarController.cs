@@ -182,33 +182,20 @@ namespace PieChart.Controllers
         {
             try
             {
-                if (value == "")
+                var data = db.CAR.GroupBy(x => x.MANUFACTURER).ToList();
+                if (!string.IsNullOrEmpty(value))
                 {
-                    var data = db.CAR.GroupBy(x => x.MANUFACTURER).ToList();
-                    var returnObj = new List<ReturnData>();
-                    foreach (var item in data)
-                    {
-                        var unit = new ReturnData();
-                        unit.Key = item.Key;
-                        unit.Number = item.Count();
-                        returnObj.Add(unit);
-                    }
-                    return Json(returnObj, JsonRequestBehavior.AllowGet);
+                    data = db.CAR.Where(x => x.MODEL.Contains(value) || x.MANUFACTURER.Contains(value)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).GroupBy(x => x.MANUFACTURER).ToList();
                 }
-                else
-
+                var returnObj = new List<ReturnData>();
+                foreach (var item in data)
                 {
-                    var data = db.CAR.Where(x => x.MODEL.Contains(value) || x.MANUFACTURER.Contains(value)).CustomDistinct(x => new { x.MANUFACTURER, x.MODEL }).GroupBy(x => x.MANUFACTURER).ToList();
-                    var returnObj = new List<ReturnData>();
-                    foreach (var item in data)
-                    {
-                        var unit = new ReturnData();
-                        unit.Key = item.Key;
-                        unit.Number = item.Count();
-                        returnObj.Add(unit);
-                    }
-                    return Json(returnObj, JsonRequestBehavior.AllowGet);
+                    var unit = new ReturnData();
+                    unit.Key = item.Key;
+                    unit.Number = item.Count();
+                    returnObj.Add(unit);
                 }
+                return Json(returnObj, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
